@@ -9,3 +9,7 @@
 ### Caveats:
 4. To run `LiquidAI/LFM2-8B-A1B` you will need this transformers version: `pip install transformers==5.0.0.dev0`.
 5. For all Phi models you will need an older transformers version: `pip install transformers==4.42.3`.
+
+
+### Open Data
+6. All data and results of this project can be found ... (add open data location here).
