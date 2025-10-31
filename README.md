@@ -1,5 +1,5 @@
 ## In progress:
-### Repository to run experiments on Reliability and Validity of human measurement techniques on LLM "personality".
+### Repository to run experiments on Reliability and Validity of using human measurement techniques to assess LLM "personality".
 
 ## How to run the experiment:
 1. Go to `data_generation`.
