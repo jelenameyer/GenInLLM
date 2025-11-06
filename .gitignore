@@ -1,2 +1,6 @@
 LLM_data/
 NON_IDEAL_OUTPUTS/
+.DS_store
+# Ignore Python bytecode
+__pycache__/
+*.py[cod]
