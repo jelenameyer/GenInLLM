@@ -13,3 +13,12 @@
 
 ### Open Data
 6. All data and results of this project can be found ... (add open data location here).
+
+
+
+## How to run the data analysis:
+1. Go to `data_analysis`.
+2. Build a folder `LLM_data` in which you add all data either generated or received at ... .
+3. Run `data_wrangling.py` first, then `data_wrangling_behavioural_tasks.py`.
+Outcome: Processed data with item responses per model.
+(Format: Models function as individuals, each has answers on all subtasks of each task).
