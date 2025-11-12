@@ -29,3 +29,11 @@ def load_dataframes(task_name, path = "LLM_data"):
     print(f"Total models: {merged_data['model'].nunique()}")
 
     return(merged_data)
+
+
+# filter out probability LLM assigned to real item answer  ------------------------------------------
+def filter_pred_prob(data, human_col = "human_number"):
+    data["prob_pred"] = data.apply(
+        lambda row: row[f"prob_{row[human_col]}"], axis=1
+    )
+    return(data)
