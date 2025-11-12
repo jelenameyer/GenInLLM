@@ -16,7 +16,7 @@ from utilsBehaviouralTasks import detect_chat_tokens, get_token_sequence
 from base_task import encode_without_chat_template
 
 # Task-specific configuration
-DATA_FILE = "survey_data/prompts_lot.jsonl"  
+DATA_FILE = "survey_data/prompts_lot_with_prob_numbers.jsonl"  
 
 def parse_lot_data(text: str) -> Dict[str, Any]:
     """
@@ -37,19 +37,26 @@ def parse_lot_data(text: str) -> Dict[str, Any]:
     instructions = text[:instructions_end].strip() + " For each statement, following the '<<' brackets, strictly respond with one letter." if instructions_end != -1 else ""
 
     # Split into Problem sections
-    Problem_pattern = r'\n\n(Problem \d+:.*?)(?=\n\nProblem \d+:|\Z)'
+    Problem_pattern = r'(?m)^Problem\s+\d+(?:\.\d+)*:.*?(?=^Problem\s+\d+(?:\.\d+)*:|\Z)'
     Problem_matches = re.findall(Problem_pattern, text, re.DOTALL)
-    
+
     problems = []
     for problem_text in Problem_matches:
         # Extract the problem number from within the text
-        problem_num = re.search(r'Problem (\d+):', problem_text)
+        problem_num = re.search(r'Problem\s+(\d+(?:\.\d+)*):', problem_text)
+        problem_num = problem_num.group(1)
 
-        problems.append({
-            "problem_num": int(problem_num.group(1)),
-            "problem_text": problem_text
-        })
-
+        if re.fullmatch(r'\d+', problem_num):
+            problems.append({
+                "problem_num": int(problem_num),
+                "problem_text": problem_text
+            })
+        else: 
+            problems.append({
+                "problem_num": float(problem_num),
+                "problem_text": problem_text
+            })
+    #print(problems)
     return {
         "instructions": instructions,
         "box_1_key": box_1_key,
@@ -76,7 +83,6 @@ def build_chat_sequence_with_decisions(parsed_data: Dict[str, Any], tokenizer: A
     for problem in problems:
         problem_num = problem["problem_num"]
         problem_text = problem["problem_text"]
-
         problem_start = re.search(rf'Problem {problem_num}:.*?You chose', problem_text, re.DOTALL)
         problem_start = problem_start.group()
         
@@ -173,9 +179,6 @@ def get_decision_logprobs_chat_style(sequence_data: Dict[str, Any], model: AutoM
    # Get token IDs for box_1 and box_2 keys
     box_1_token_with_space = encode_without_chat_template(tokenizer, f" {box_1_key}").input_ids[0]
     box_2_token_with_space = encode_without_chat_template(tokenizer, f" {box_2_key}").input_ids[0]
-    # get warning if the tokenizers split the token that we are looking for
-    # if len(box_1_token_with_space) > 1 or len(box_2_token_with_space) > 1:
-    #     logging.warning("Key tokenized into multiple tokens — may affect logprobs.")
 
     # Handle space and letter split case
     box_1_seq = get_token_sequence(box_1_token_with_space).tolist()
@@ -190,7 +193,7 @@ def get_decision_logprobs_chat_style(sequence_data: Dict[str, Any], model: AutoM
     # Single forward pass for the entire sequence
     with torch.inference_mode():
         outputs = model(input_ids=input_ids.to(model.device))
-        logits = outputs.logits  # (1, seq_len, vocab)
+        logits = outputs.logits  
     
     results = []
     
@@ -206,7 +209,6 @@ def get_decision_logprobs_chat_style(sequence_data: Dict[str, Any], model: AutoM
             # Get all tokens that make up the assistant marker
             assistant_token_ids = tokenizer(sequence_data["assistant_token"], add_special_tokens=False).input_ids
             num_assistant_toks = len(assistant_token_ids)
-            #print(f'len ass token: {num_assistant_toks}')
 
             # Compute the position right *after* the full assistant marker
             pred_pos = assist_token_pos + num_assistant_toks
