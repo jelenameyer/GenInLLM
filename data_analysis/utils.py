@@ -6,12 +6,12 @@ import os
 import matplotlib.pyplot as plt
 
 # Loading all data files of one task ------------------------------------------------------------
-def load_dataframes(task_name, path = "LLM_data"):
+def load_dataframes(task_name, path = "LLM_data"):  #"simulation_random"):
 
     # Initialize empty list to store DataFrames
     dataframe = []
 
-    path = "LLM_data"  # folder with CSVs of LLM answers
+    path = path  # folder with CSVs of LLM answers
 
     for file in glob.glob(os.path.join(path, f"*_{task_name}_prompting_results.csv")):
         model_name = os.path.basename(file).replace(f"*_{task_name}_prompting_results.csv", "")
