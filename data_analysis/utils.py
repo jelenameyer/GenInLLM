@@ -6,7 +6,7 @@ import os
 import matplotlib.pyplot as plt
 
 # Loading all data files of one task ------------------------------------------------------------
-def load_dataframes(task_name, path = "LLM_data"):  #"simulation_random"):
+def load_dataframes(task_name, path = "LLM_data"): #"simulation_non_random"):   #"simulation_random"):
 
     # Initialize empty list to store DataFrames
     dataframe = []
