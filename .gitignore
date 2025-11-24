@@ -1,5 +1,6 @@
 LLM_data/
 simulation_random/
+human_data/
 NON_IDEAL_OUTPUTS/
 .DS_store
 # Ignore Python bytecode
