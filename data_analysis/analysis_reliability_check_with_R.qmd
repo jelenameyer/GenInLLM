@@ -18,32 +18,46 @@ library(tidyr)
 
 
 ```{r read-data}
-items_per_LLM <- read_csv("processed_data/items_per_LLM.csv")
+items_per_LLM <- read_csv("human_data_analysis/human_data/items_per_person.csv")
+
 ```
 
 
 
 ```{r subset-data}
-audit_df <- items_per_LLM %>%
-  filter(experiment == "AUDIT scale")
+SSSV_subscale_df <- items_per_LLM %>%
+  #filter(category == "SSbor")
+  filter(experiment == "FTND scale")
 
-audit_wide <- audit_df %>%
+SSSV_subscale_wide <- SSSV_subscale_df %>%
   pivot_wider(
-    id_cols = c(experiment, model),
+    id_cols = c(experiment, partid),
     names_from = item,
     values_from = score
   )
 
-audit_wide
+SSSV_subscale_wide
 
 ```
+
+
+
 
 ```{r}
-psych::alpha(audit_wide %>% select(-experiment, -model))
+# Select only smokers
+smokers_data <- SSSV_subscale_wide %>%
+  filter(`1.0` == 2) %>%   # adjust column name
+  select(`2.0`:`7.0`)  # only the follow-up items
+
+# Compute reliability
+psych::alpha(smokers_data, check.keys = TRUE)
 ```
 
+
 ```{r}
+psych::alpha(SSSV_subscale_wide %>% select(-experiment, -partid), check.keys = TRUE)
 ```
+
 
 
 

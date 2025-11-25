@@ -147,90 +147,76 @@ dbl (4): score, score_top_n, H_score, score_expected
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>audit_df <span class="ot">&lt;-</span> items_per_LLM <span class="sc">%&gt;%</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(experiment <span class="sc">==</span> <span class="st">"AUDIT scale"</span>)</span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>SSSV_subscale_df <span class="ot">&lt;-</span> items_per_LLM <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(experiment <span class="sc">==</span> <span class="st">"FTND scale"</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>audit_wide <span class="ot">&lt;-</span> audit_df <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>SSSV_subscale_wide <span class="ot">&lt;-</span> SSSV_subscale_df <span class="sc">%&gt;%</span></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">id_cols =</span> <span class="fu">c</span>(experiment, model),</span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> item,</span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> score</span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>audit_wide</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>SSSV_subscale_wide</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 46 × 13
-   experiment  model      `1`   `2`   `3`   `4`   `5`    `6`     `7`   `8`   `9`
-   &lt;chr&gt;       &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
- 1 AUDIT scale Apertus… 0.928  2.67 0.656 1.16  0.135 0.196  0.0190  0.401 0.350
- 2 AUDIT scale Apertus… 0.927  2.59 0.770 1.02  0.162 0.168  0.0117  0.286 0.218
- 3 AUDIT scale Falcon-… 0.903  2.25 0.934 1.12  0.435 0.315  0.0569  0.667 0.705
- 4 AUDIT scale Falcon-… 0.925  2.33 0.446 0.977 0.227 0.122  0.00798 0.300 0.191
- 5 AUDIT scale Falcon-… 0.932  2.29 0.686 1.09  0.210 0.135  0.00901 0.290 0.209
- 6 AUDIT scale LFM2-1.… 0.938  2.45 0.739 1.17  0.244 0.210  0.0141  0.364 0.308
- 7 AUDIT scale LFM2-2.… 0.945  2.38 0.888 0.906 0.141 0.0920 0.00729 0.168 0.156
- 8 AUDIT scale LFM2-8B… 0.934  2.41 0.777 1.10  0.239 0.166  0.0127  0.250 0.214
- 9 AUDIT scale Llama-3… 0.919  2.65 0.586 1.10  0.226 0.203  0.0182  0.424 0.324
-10 AUDIT scale Llama-3… 0.924  2.66 0.502 0.955 0.147 0.116  0.00596 0.210 0.143
-# ℹ 36 more rows
-# ℹ 2 more variables: `10` &lt;dbl&gt;, `11` &lt;dbl&gt;</code></pre>
+<pre><code># A tibble: 46 × 9
+   experiment model                    `1`   `2`    `3`   `4`    `5`   `6`   `7`
+   &lt;chr&gt;      &lt;chr&gt;                  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 FTND scale Apertus-70B-Instruct-… 0.455 1.04  0.0754 0.253 0.0486 0.147 0.258
+ 2 FTND scale Apertus-8B-Instruct-2… 0.675 0.511 0.0620 0.219 0.0524 0.127 0.185
+ 3 FTND scale Falcon-3-10B-Instruct  0.852 0.847 0.0720 0.229 0.528  0.140 0.190
+ 4 FTND scale Falcon-3-1B-Instruct   1.15  0.505 0.101  0.452 0.0724 0.149 0.242
+ 5 FTND scale Falcon-3-7B-Instruct   0.872 0.877 0.0919 0.255 0.205  0.151 0.239
+ 6 FTND scale LFM2-1.2B              1.04  0.644 0.0697 0.271 0.538  0.131 0.189
+ 7 FTND scale LFM2-2.6B              1.00  0.699 0.162  0.288 0.574  0.141 0.211
+ 8 FTND scale LFM2-8B-A1B            0.530 0.546 0.104  0.296 0.280  0.184 0.302
+ 9 FTND scale Llama-3.1-70B-Instruct 0.707 0.632 0.0805 0.277 0.271  0.163 0.245
+10 FTND scale Llama-3.1-8B-Instruct  1.19  0.437 0.0730 0.256 0.305  0.143 0.213
+# ℹ 36 more rows</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(audit_wide <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>experiment, <span class="sc">-</span>model))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(SSSV_subscale_wide <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>experiment, <span class="sc">-</span>model), <span class="at">check.keys =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Number of categories should be increased  in order to count frequencies. </code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning in psych::alpha(audit_wide %&gt;% select(-experiment, -model)): Some items were negatively correlated with the first principal component and probably 
-should be reversed.  
-To do this, run the function again with the 'check.keys=TRUE' option</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Some items ( 1 2 ) were negatively correlated with the first principal component and 
-probably should be reversed.  
-To do this, run the function again with the 'check.keys=TRUE' option</code></pre>
+<pre><code>Warning in psych::alpha(SSSV_subscale_wide %&gt;% select(-experiment, -model), : Some items were negatively correlated with the first principal component and were automatically reversed.
+ This is indicated by a negative sign for the variable name.</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Reliability analysis   
-Call: psych::alpha(x = audit_wide %&gt;% select(-experiment, -model))
+Call: psych::alpha(x = SSSV_subscale_wide %&gt;% select(-experiment, -model), 
+    check.keys = TRUE)
 
-  raw_alpha std.alpha G6(smc) average_r S/N   ase mean   sd median_r
-      0.74      0.82    0.92      0.29 4.5 0.046 0.59 0.06      0.2
+  raw_alpha std.alpha G6(smc) average_r S/N  ase mean    sd median_r
+      0.21       0.6    0.69      0.18 1.5 0.15 0.37 0.058     0.17
 
     95% confidence boundaries 
          lower alpha upper
-Feldt     0.61  0.74  0.84
-Duhachek  0.65  0.74  0.83
+Feldt    -0.19  0.21  0.52
+Duhachek -0.07  0.21  0.50
 
  Reliability if an item is dropped:
-   raw_alpha std.alpha G6(smc) average_r S/N alpha se var.r med.r
-1       0.75      0.85    0.94      0.36 5.7    0.046  0.12  0.34
-2       0.79      0.85    0.93      0.36 5.6    0.034  0.12  0.34
-3       0.74      0.81    0.92      0.30 4.3    0.048  0.14  0.19
-4       0.63      0.78    0.89      0.26 3.5    0.075  0.13  0.15
-5       0.70      0.78    0.90      0.27 3.6    0.053  0.12  0.16
-6       0.70      0.76    0.89      0.24 3.2    0.053  0.11  0.15
-7       0.74      0.78    0.90      0.26 3.6    0.047  0.11  0.19
-8       0.68      0.77    0.90      0.25 3.3    0.056  0.11  0.16
-9       0.68      0.77    0.89      0.25 3.3    0.056  0.11  0.16
-10      0.75      0.83    0.92      0.33 4.9    0.045  0.13  0.33
-11      0.73      0.81    0.91      0.29 4.1    0.048  0.14  0.16
+   raw_alpha std.alpha G6(smc) average_r  S/N alpha se var.r med.r
+1      -0.27      0.58    0.66      0.18 1.35    0.272 0.068  0.19
+2-      0.24      0.64    0.69      0.23 1.78    0.132 0.043  0.20
+3       0.19      0.51    0.61      0.15 1.04    0.152 0.055  0.12
+4       0.16      0.48    0.60      0.13 0.94    0.158 0.054  0.11
+5       0.37      0.66    0.67      0.24 1.94    0.096 0.030  0.19
+6       0.19      0.45    0.54      0.12 0.83    0.153 0.046  0.12
+7       0.20      0.56    0.62      0.17 1.25    0.153 0.050  0.12
 
  Item statistics 
-    n raw.r std.r  r.cor r.drop  mean     sd
-1  46 -0.03 0.067 -0.069 -0.062 0.920 0.0212
-2  46  0.20 0.119  0.036 -0.027 2.488 0.1470
-3  46  0.69 0.505  0.467  0.447 0.658 0.2145
-4  46  0.90 0.792  0.794  0.817 1.018 0.1849
-5  46  0.67 0.752  0.751  0.596 0.208 0.0825
-6  46  0.85 0.927  0.954  0.819 0.157 0.0558
-7  46  0.66 0.764  0.786  0.657 0.013 0.0081
-8  46  0.78 0.873  0.891  0.695 0.325 0.1132
-9  46  0.78 0.859  0.888  0.707 0.243 0.1025
-10 46  0.23 0.312  0.247  0.129 0.217 0.0684
-11 46  0.52 0.564  0.534  0.458 0.198 0.0505</code></pre>
+    n raw.r std.r r.cor r.drop  mean    sd
+1  46  0.80  0.51  0.36   0.39 0.703 0.227
+2- 46  0.64  0.34  0.17   0.07 0.813 0.242
+3  46  0.29  0.66  0.59   0.24 0.088 0.022
+4  46  0.41  0.71  0.65   0.32 0.275 0.042
+5  46  0.21  0.27  0.14  -0.16 0.298 0.152
+6  46  0.35  0.76  0.76   0.30 0.148 0.023
+7  46  0.23  0.56  0.48   0.16 0.231 0.032</code></pre>
 </div>
 </div>
 </section>
