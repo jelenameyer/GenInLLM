@@ -16,7 +16,7 @@ def is_int_like_colname(colname):
 np.random.seed(13)   # seed for reproducible randomness
 #task_names = ["AUDIT"]     # for testing
 path = "LLM_data"          # folder with original CSVs
-out_path = "simulation_non_random" 
+out_path = "simulation_semi_random" 
 os.makedirs(out_path, exist_ok=True)
 
 # TASK NAMES
@@ -61,7 +61,7 @@ for task in task_names:
 
         # Randomize selected columns with normal distribution + model offset
         for c in cols_to_randomize:
-            df_work_with[c] = np.random.normal(loc=-10 + offset, scale=5, size=len(df_work_with))
+            df_work_with[c] = np.random.normal(loc=-10 + offset, scale=1, size=len(df_work_with))
 
         # Save output
         out_file = os.path.join(out_path, f"{model_name}_{task}_prompting_results.csv")
