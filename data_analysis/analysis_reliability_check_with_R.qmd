@@ -1,0 +1,51 @@
+---
+title: "analysis_reliability_check_with_R"
+author: "Jelena Meyer"
+format: html
+editor: visual
+---
+
+## Recalculate Reliability of all scales using Cronbach's Alpha from `psych`
+
+```{r packages}
+library(readr)
+library(psych)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+```
+
+
+
+```{r read-data}
+items_per_LLM <- read_csv("processed_data/items_per_LLM.csv")
+```
+
+
+
+```{r subset-data}
+audit_df <- items_per_LLM %>%
+  filter(experiment == "AUDIT scale")
+
+audit_wide <- audit_df %>%
+  pivot_wider(
+    id_cols = c(experiment, model),
+    names_from = item,
+    values_from = score
+  )
+
+audit_wide
+
+```
+
+```{r}
+psych::alpha(audit_wide %>% select(-experiment, -model))
+```
+
+```{r}
+```
+
+
+
+
+
