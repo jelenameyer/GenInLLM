@@ -108,75 +108,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="recalculate-reliability-of-all-scales-using-cronbachs-alpha-from-psych" class="level2">
 <h2 class="anchored" data-anchor-id="recalculate-reliability-of-all-scales-using-cronbachs-alpha-from-psych">Recalculate Reliability of all scales using Cronbach’s Alpha from <code>psych</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'readr' was built under R version 4.5.2</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'ggplot2' was built under R version 4.5.2</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ purrr     1.2.0
-✔ forcats   1.0.1     ✔ stringr   1.6.0
-✔ ggplot2   4.0.1     ✔ tibble    3.3.0
-✔ lubridate 1.9.4     ✔ tidyr     1.3.1
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ ggplot2::%+%()   masks psych::%+%()
-✖ ggplot2::alpha() masks psych::alpha()
-✖ dplyr::filter()  masks stats::filter()
-✖ dplyr::lag()     masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>items_per_LLM <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"processed_data/items_per_LLM.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Rows: 21192 Columns: 8
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr (4): experiment, model, item, category
-dbl (4): score, score_top_n, H_score, score_expected
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>items_per_LLM <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"processed_data/items_per_llm.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>SSSV_subscale_df <span class="ot">&lt;-</span> items_per_LLM <span class="sc">%&gt;%</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(experiment <span class="sc">==</span> <span class="st">"FTND scale"</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>SSSV_subscale_wide <span class="ot">&lt;-</span> SSSV_subscale_df <span class="sc">%&gt;%</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">id_cols =</span> <span class="fu">c</span>(experiment, model),</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> item,</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> score</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>SSSV_subscale_wide</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 46 × 9
-   experiment model                    `1`   `2`    `3`   `4`    `5`   `6`   `7`
-   &lt;chr&gt;      &lt;chr&gt;                  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
- 1 FTND scale Apertus-70B-Instruct-… 0.455 1.04  0.0754 0.253 0.0486 0.147 0.258
- 2 FTND scale Apertus-8B-Instruct-2… 0.675 0.511 0.0620 0.219 0.0524 0.127 0.185
- 3 FTND scale Falcon-3-10B-Instruct  0.852 0.847 0.0720 0.229 0.528  0.140 0.190
- 4 FTND scale Falcon-3-1B-Instruct   1.15  0.505 0.101  0.452 0.0724 0.149 0.242
- 5 FTND scale Falcon-3-7B-Instruct   0.872 0.877 0.0919 0.255 0.205  0.151 0.239
- 6 FTND scale LFM2-1.2B              1.04  0.644 0.0697 0.271 0.538  0.131 0.189
- 7 FTND scale LFM2-2.6B              1.00  0.699 0.162  0.288 0.574  0.141 0.211
- 8 FTND scale LFM2-8B-A1B            0.530 0.546 0.104  0.296 0.280  0.184 0.302
- 9 FTND scale Llama-3.1-70B-Instruct 0.707 0.632 0.0805 0.277 0.271  0.163 0.245
-10 FTND scale Llama-3.1-8B-Instruct  1.19  0.437 0.0730 0.256 0.305  0.143 0.213
-# ℹ 36 more rows</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>SSSV_subscale_df <span class="ot">&lt;-</span> items_per_LLM <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(category <span class="sc">==</span> <span class="st">"SSbor"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#filter(experiment == "FTND scale")</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>SSSV_subscale_wide <span class="ot">&lt;-</span> SSSV_subscale_df <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">id_cols =</span> <span class="fu">c</span>(experiment, model),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> item,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> score</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(SSSV_subscale_wide <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>experiment, <span class="sc">-</span>model), <span class="at">check.keys =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute reliability -&gt; with check keys (turn item orientation around again)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(SSSV_subscale_wide <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>experiment, <span class="sc">-</span>model), <span class="at">check.keys =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Number of categories should be increased  in order to count frequencies. </code></pre>
 </div>
@@ -190,33 +145,96 @@ Reliability analysis
 Call: psych::alpha(x = SSSV_subscale_wide %&gt;% select(-experiment, -model), 
     check.keys = TRUE)
 
-  raw_alpha std.alpha G6(smc) average_r S/N  ase mean    sd median_r
-      0.21       0.6    0.69      0.18 1.5 0.15 0.37 0.058     0.17
+  raw_alpha std.alpha G6(smc) average_r S/N    ase mean    sd median_r
+      0.97      0.97    0.99      0.79  38 0.0056  1.5 0.072     0.79
 
     95% confidence boundaries 
          lower alpha upper
-Feldt    -0.19  0.21  0.52
-Duhachek -0.07  0.21  0.50
+Feldt     0.96  0.97  0.98
+Duhachek  0.96  0.97  0.98
 
  Reliability if an item is dropped:
-   raw_alpha std.alpha G6(smc) average_r  S/N alpha se var.r med.r
-1      -0.27      0.58    0.66      0.18 1.35    0.272 0.068  0.19
-2-      0.24      0.64    0.69      0.23 1.78    0.132 0.043  0.20
-3       0.19      0.51    0.61      0.15 1.04    0.152 0.055  0.12
-4       0.16      0.48    0.60      0.13 0.94    0.158 0.054  0.11
-5       0.37      0.66    0.67      0.24 1.94    0.096 0.030  0.19
-6       0.19      0.45    0.54      0.12 0.83    0.153 0.046  0.12
-7       0.20      0.56    0.62      0.17 1.25    0.153 0.050  0.12
+    raw_alpha std.alpha G6(smc) average_r S/N alpha se  var.r med.r
+2-       0.97      0.98    0.99      0.82  42   0.0057 0.0043  0.82
+5        0.97      0.97    0.98      0.79  33   0.0063 0.0098  0.79
+7-       0.97      0.97    0.98      0.80  36   0.0055 0.0084  0.81
+8        0.97      0.97    0.98      0.79  33   0.0063 0.0096  0.79
+15-      0.97      0.97    0.98      0.78  33   0.0064 0.0096  0.79
+24       0.97      0.97    0.98      0.78  32   0.0066 0.0091  0.79
+27-      0.97      0.97    0.98      0.79  35   0.0061 0.0083  0.80
+31-      0.97      0.97    0.98      0.79  33   0.0063 0.0078  0.79
+34       0.97      0.97    0.98      0.78  33   0.0065 0.0080  0.79
+39       0.97      0.97    0.98      0.78  32   0.0066 0.0078  0.79
 
  Item statistics 
-    n raw.r std.r r.cor r.drop  mean    sd
-1  46  0.80  0.51  0.36   0.39 0.703 0.227
-2- 46  0.64  0.34  0.17   0.07 0.813 0.242
-3  46  0.29  0.66  0.59   0.24 0.088 0.022
-4  46  0.41  0.71  0.65   0.32 0.275 0.042
-5  46  0.21  0.27  0.14  -0.16 0.298 0.152
-6  46  0.35  0.76  0.76   0.30 0.148 0.023
-7  46  0.23  0.56  0.48   0.16 0.231 0.032</code></pre>
+     n raw.r std.r r.cor r.drop mean    sd
+2-  46  0.76  0.77  0.74   0.72  1.8 0.050
+5   46  0.91  0.91  0.90   0.89  1.2 0.075
+7-  46  0.87  0.87  0.86   0.83  1.4 0.101
+8   46  0.92  0.92  0.92   0.90  1.6 0.086
+15- 46  0.92  0.93  0.92   0.91  1.6 0.064
+24  46  0.94  0.94  0.94   0.92  1.5 0.096
+27- 46  0.88  0.88  0.88   0.86  1.5 0.066
+31- 46  0.92  0.92  0.91   0.90  1.4 0.078
+34  46  0.93  0.93  0.93   0.92  1.6 0.085
+39  46  0.94  0.94  0.94   0.92  1.5 0.094</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute reliability -&gt; without check keys (keep items as is)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(SSSV_subscale_wide <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>experiment, <span class="sc">-</span>model), <span class="at">check.keys =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Number of categories should be increased  in order to count frequencies. </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in psych::alpha(SSSV_subscale_wide %&gt;% select(-experiment, -model), : Some items were negatively correlated with the first principal component and probably 
+should be reversed.  
+To do this, run the function again with the 'check.keys=TRUE' option</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Some items ( 2 7 15 27 31 ) were negatively correlated with the first principal component and 
+probably should be reversed.  
+To do this, run the function again with the 'check.keys=TRUE' option</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Reliability analysis   
+Call: psych::alpha(x = SSSV_subscale_wide %&gt;% select(-experiment, -model), 
+    check.keys = FALSE)
+
+  raw_alpha std.alpha G6(smc) average_r   S/N  ase mean    sd median_r
+      -3.2      -6.6    0.18    -0.095 -0.87 0.82  1.4 0.013    -0.68
+
+    95% confidence boundaries 
+         lower alpha upper
+Feldt    -5.22 -3.16 -1.58
+Duhachek -4.77 -3.16 -1.56
+
+ Reliability if an item is dropped:
+   raw_alpha std.alpha G6(smc) average_r   S/N alpha se var.r med.r
+2      -1.66      -3.1    0.64    -0.092 -0.76     0.45  0.69 -0.73
+5      -5.68      -4.7    0.35    -0.101 -0.82     1.76  0.64 -0.69
+7      -0.46      -2.6    0.55    -0.087 -0.72     0.19  0.66 -0.67
+8      -4.52      -3.8    0.36    -0.097 -0.79     1.48  0.63 -0.67
+15     -1.14      -2.7    0.58    -0.088 -0.73     0.31  0.63 -0.67
+24     -9.79      -5.8    0.16    -0.105 -0.85     2.93  0.62 -0.67
+27     -1.12      -2.6    0.59    -0.087 -0.72     0.32  0.65 -0.67
+31     -0.78      -2.5    0.57    -0.086 -0.71     0.26  0.64 -0.67
+34     -8.52      -5.5    0.21    -0.104 -0.85     2.56  0.63 -0.70
+39     -8.25      -5.4    0.23    -0.103 -0.84     2.51  0.63 -0.70
+
+ Item statistics 
+    n raw.r  std.r r.cor r.drop mean    sd
+2  46 -0.46  0.027 -0.65  -0.69  1.2 0.050
+5  46  0.65  0.292  0.44   0.10  1.2 0.075
+7  46 -0.46 -0.109 -0.46  -0.81  1.5 0.101
+8  46  0.57  0.171  0.27  -0.11  1.6 0.086
+15 46 -0.55 -0.087 -0.46  -0.78  1.3 0.064
+24 46  0.82  0.406  0.82   0.14  1.5 0.096
+27 46 -0.54 -0.106 -0.53  -0.78  1.4 0.066
+31 46 -0.59 -0.147 -0.51  -0.83  1.5 0.078
+34 46  0.79  0.385  0.80   0.21  1.6 0.085
+39 46  0.78  0.370  0.78   0.09  1.5 0.094</code></pre>
 </div>
 </div>
 </section>
