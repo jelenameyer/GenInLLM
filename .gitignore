@@ -2,6 +2,7 @@ LLM_data/
 simulation_random/
 simulation_semi_random/
 sim_non_rand_answer_tendencies/
+sim_non_rand_2nd/
 human_data/
 NON_IDEAL_OUTPUTS/
 analysis_reliability_check_with_R_files/
